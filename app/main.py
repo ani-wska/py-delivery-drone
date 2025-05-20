@@ -3,50 +3,50 @@ class Cargo:
         self.weight = weight
 
 class BaseRobot:
-    def __init__(self, weight: int, name: str, coords: list) -> None:
+    def __init__(self, name: str, weight: int, coords = [0, 0]) -> None:
         self.weight = weight
         self.name = name
         self.coords = coords
 
 
-    def go_forward(self, coords: list, step: int = 1) -> None:
-        coords[1] += step
+
+    def go_forward(self, step: int = 1) -> None:
+        self.coords[1] += step
 
 
-    def go_back(self, coords: list, step: int = 1) -> None:
-        coords[1] -= step
+    def go_back(self, step: int = 1) -> None:
+        self.coords[1] -= step
 
 
-    def go_right(self, coords: list, step: int = 1) -> None:
-        coords[0] += step
+    def go_right(self, step: int = 1) -> None:
+        self.coords[0] += step
 
 
-    def go_left(self, coords: list, step: int = 1) -> None:
-        coords[0] -= step
+    def go_left(self, step: int = 1) -> None:
+        self.coords[0] -= step
 
     def get_info(self) -> dict:
-        return {"Robot": {self.name}, "Weight": {self.weight}}
+        return F"Robot: {self.name}, Weight: {self.weight}"
 
 
 class FlyingRobot(BaseRobot):
-    def __init__(self, weight: int, name: str, coords: list) -> None:
-        super().__init__(weight, name, coords)
+    def __init__(self, name: str, weight: int, coords: list = None) -> None:
         if coords is None:
             coords = [0, 0, 0]
         elif len(coords) == 2:
-            coords.append(0)
+            coords = coords + [0]
+        super().__init__(name, weight, coords)
+
         self.coords = coords
 
-    @staticmethod
-    def go_up(coords: list, step: int = 1) -> None:
-        coords[2] += step
+    def go_up(self, step: int = 1) -> None:
+        self.coords[2] += step
 
-    @staticmethod
-    def go_down(coords: list, step: int = 1) -> None:
-        coords[2] -= step
+    def go_down(self, step: int = 1) -> None:
+        self.coords[2] -= step
 
 class DeliveryDrone(FlyingRobot):
-    def __init__(self, name: int, weight: str, max_load_weight: int, coords=None, current_load: Cargo = None) -> None:
+    def __init__(self, name: str, weight: int, max_load_weight: int, coords=None,  current_load: Cargo = None) -> None:
         super().__init__(name, weight, coords)
         self.max_load_weight = max_load_weight
         self.current_load = None
@@ -60,13 +60,3 @@ class DeliveryDrone(FlyingRobot):
 
     def unhook_load(self) -> None:
         self.current_load = None
-
-
-
-
-
-
-
-
-
-
